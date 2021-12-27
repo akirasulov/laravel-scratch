@@ -15,9 +15,20 @@
                 </a>
             </div>
 
-            <div class="mt-8 md:mt-0">
-                <a href="/" class="text-xs font-bold uppercase">Home Page</a>
-
+            <div class="mt-8 md:mt-0 flex item-center">
+                {{-- @guest
+                <a href="/register" class="text-xs font-bold uppercase">Register</a>
+                @endguest --}}
+                @auth()
+                <span class="ml-3 text-xs font-semibold uppercase py-3 px-5">{{ auth()->user()->name }}</span>
+                <form action="/logout" method="post" class="ml-3 text-xs font-semibold uppercase py-3 px-5">
+                    @csrf
+                    <button type="submit" class="text-blue-500">Log out</button>
+                </form>
+                @else
+                <a href="/register" class="ml-3 text-xs font-bold uppercase py-3 px-5 uppercase">Register</a>
+                <a href="/login" class="ml-1 text-xs font-bold uppercase py-3 px-5 uppercase">Log in</a>
+                @endauth
                 <a href="#" class="bg-blue-500 ml-3 rounded-full text-xs font-semibold text-white uppercase py-3 px-5">
                     Subscribe for Updates
                 </a>
@@ -54,4 +65,12 @@
             </div>
         </footer>
     </section>
+    @if (session()->has('success'))
+        <div x-data = "{show: true}"
+             x-init="setTimeout(() => show = false, 4000)"
+             x-show="show"
+             class="fixed bg-blue-500 text-white py-2 px-4 rounded-xl bottom-3 right-3 text-sm">
+            <p>{{ session('success') }}</p>
+        </div>
+    @endif
 </body>

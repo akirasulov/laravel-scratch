@@ -1,42 +1,11 @@
 <x-layout>
     <section class="px-6 py-8">
         <main class="max-w-lg mx-auto mt-10 bg-gray-100 border border-gray-200 border-xl p-8">
-            <h1 class="text-center text-xl font-bold">Register</h1>
-            <form method="POST" action="/register" class="mt-10">
+            <h1 class="text-center text-xl font-bold uppercase">
+                <a href="/login">Log In</a>
+            </h1>
+            <form method="POST" action="/login" class="mt-10">
                 @csrf
-
-                <div class="mb-6">
-                    <label class="block mb-2 uppercase font-bold text-xs text-gray-700" 
-                    for="name">
-                    Name
-                </label>
-                    <input class="border border-grey-400 p-2 w-full" 
-                           type="text"
-                           name="name"
-                           id="name"
-                           value="{{ old('name') }}"
-                           required>
-                           @error('name')
-                           <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                           @enderror
-                </div>
-                
-
-                <div class="mb-6">
-                    <label class="block mb-2 uppercase font-bold text-xs text-gray-700" 
-                    for="username">
-                    Username
-                </label>
-                    <input class="border border-grey-400 p-2 w-full" 
-                           type="text"
-                           name="username"
-                           id="username"
-                           value="{{ old('username') }}"
-                           required>
-                           @error('username')
-                           <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                           @enderror
-                </div>
 
                 <div class="mb-6">
                     <label class="block mb-2 uppercase font-bold text-xs text-gray-700" 
@@ -66,18 +35,15 @@
                            required>
                     <input class="mt-4" type="checkbox" onclick="togglePassword()" >
                     <label class="pl-2" for="password">Show password</label>
-                    @error('password')
-                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                    @enderror
                 </div>
 
                 <div class="mb-6">
                     <button type="submit" 
                             class="bg-blue-400 text-white rounded py-2 px-4 hover:bg-blue-600 ">
-                        Submit
+                        Log in
                     </button>
                 </div>
-             <x-flash />
+             {{-- <x-flash /> --}}
         </form>
         </main>
     </section>
