@@ -6,30 +6,46 @@
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/2.3.0/alpine.js" integrity="sha512-nIwdJlD5/vHj23CbO2iHCXtsqzdTTx3e3uAmpTm4x2Y8xCIFyWu4cSIV8GaGe2UNVq86/1h9EgUZy7tn243qdA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+<style>
+    html {
+        scroll-behavior: smooth;
+    }
+</style>
+
 <body style="font-family: Open Sans, sans-serif">
     <section class="px-6 py-8">
         <nav class="md:flex md:justify-between md:items-center">
             <div>
                 <a href="/">
-                    <img src="./images/logo.svg" alt="Laracasts Logo" width="165" height="16">
+                    <img src="/images/logo.svg" alt="Laracasts Logo" width="165" height="16">
                 </a>
             </div>
 
             <div class="mt-8 md:mt-0 flex item-center">
-                {{-- @guest
-                <a href="/register" class="text-xs font-bold uppercase">Register</a>
-                @endguest --}}
                 @auth()
-                <span class="ml-3 text-xs font-semibold uppercase py-3 px-5">{{ auth()->user()->name }}</span>
-                <form action="/logout" method="post" class="ml-3 text-xs font-semibold uppercase py-3 px-5">
-                    @csrf
-                    <button type="submit" class="text-blue-500">Log out</button>
-                </form>
+                <x-dropdown>
+                    <x-slot name="trigger">
+                        <button class="ml-3 text-xs font-bold uppercase py-3 px-5">Welcome, {{ auth()->user()->name }}</button>
+                    </x-slot>
+                    <x-dropdown-item href="/" :active="request()->is('/')">
+                        Main
+                    </x-dropdown-item>
+                    <x-dropdown-item href="/admin/posts/create" :active="request()->is('admin/posts/create')">
+                        New Post
+                    </x-dropdown-item>
+                    <x-dropdown-item href="#" x-data={} @click.prevent="document.querySelector('#logout-form').submit()">
+                        Log out
+                    </x-dropdown-item>
+                    <form id="logout-form" action="/logout" method="post" class="hidden">
+                        @csrf
+                        {{-- <button type="submit" class="text-blue-500">Log out</button> --}}
+                    </form>
+                </x-dropdown>
                 @else
                 <a href="/register" class="ml-3 text-xs font-bold uppercase py-3 px-5 uppercase">Register</a>
                 <a href="/login" class="ml-1 text-xs font-bold uppercase py-3 px-5 uppercase">Log in</a>
                 @endauth
-                <a href="#" class="bg-blue-500 ml-3 rounded-full text-xs font-semibold text-white uppercase py-3 px-5">
+                <a href="#newsletter" class="bg-blue-500 ml-3 rounded-full text-xs font-semibold text-white uppercase py-3 px-5">
                     Subscribe for Updates
                 </a>
             </div>
@@ -37,18 +53,19 @@
 
         {{ $slot }}
 
-        <footer class="bg-gray-100 border border-black border-opacity-5 rounded-xl text-center py-16 px-10 mt-16">
-            <img src="./images/lary-newsletter-icon.svg" alt="" class="mx-auto -mb-6" style="width: 145px;">
+        <footer id="newsletter" class="bg-gray-100 border border-black border-opacity-5 rounded-xl text-center py-16 px-10 mt-16">
+            <img src="/images/lary-newsletter-icon.svg" alt="" class="mx-auto -mb-6" style="width: 145px;">
             <h5 class="text-3xl">Stay in touch with the latest posts</h5>
             <p class="text-sm mt-3">Promise to keep the inbox clean. No bugs.</p>
 
             <div class="mt-10">
                 <div class="relative inline-block mx-auto lg:bg-gray-200 rounded-full">
 
-                    <form method="POST" action="#" class="lg:flex text-sm">
+                    <form method="POST" action="/newsletter" class="lg:flex text-sm">
+                        @csrf
                         <div class="lg:py-3 lg:px-5 flex items-center">
                             <label for="email" class="hidden lg:inline-block">
-                                <img src="./images/mailbox-icon.svg" alt="mailbox letter">
+                                <img src="/images/mailbox-icon.svg" alt="mailbox letter">
                             </label>
 
                             <input id="email" type="text" placeholder="Your email address"
