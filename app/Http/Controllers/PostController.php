@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
-use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Gate;
 
 class PostController extends Controller
 {
@@ -17,29 +17,5 @@ class PostController extends Controller
     public function show(Post $post) {
         //find a post by its slug and pass it to a view called "post" 
         return view('posts.show', ['post' => $post]);
-    }
-
-    public function create() {
-        return view('posts.create');
-    }
-
-    public function store() {
-        // $path = request()->file('thumbnail')->store('public/thumbnails');
-        // return 'Done '. $path;
-
-        $attributes = request()->validate([
-            'title' => 'required',
-            'thumbnail' => 'required|image',
-            'slug' => ['required', Rule::unique('posts', 'slug')],
-            'excerpt' => 'required',
-            'body' => 'required',
-            'category_id' => ['required', Rule::exists('categories', 'id')]
-        ]);
-
-        $attributes['user_id'] = auth()->id();
-        $attributes['thumbnail'] = request()->file('thumbnail')->store('thumbnails');
-        Post::create($attributes);
-
-        return redirect('/');
     }
 }
